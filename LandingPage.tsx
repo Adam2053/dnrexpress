@@ -140,11 +140,13 @@ function Navbar() {
 
             {/* Main bar */}
             <div className="flex items-center justify-between px-6 lg:px-10 py-3">
-                {/* Logo — real image */}
-                <a href="/" className="flex items-center gap-2 group">
-                    <div className="h-11 flex items-center bg-white rounded-xl px-3 shadow-lg shadow-black/20 group-hover:shadow-amber-500/20 transition-shadow">
-                        <img src="/images/logo.jpg" alt="DNR Express" className="h-8 w-auto object-contain" />
-                    </div>
+                {/* Logo — transparent PNG */}
+                <a href="/" className="flex items-center group">
+                    <img
+                        src="/images/logo.png"
+                        alt="DNR Express"
+                        className="h-12 w-auto object-contain drop-shadow-lg group-hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.5)] transition-all duration-300"
+                    />
                 </a>
 
                 {/* Desktop links */}
@@ -222,8 +224,8 @@ function HeroWidget() {
                     return (
                         <button key={tab.id} onClick={() => setActiveTab(tab.id)}
                             className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-2 rounded-xl text-sm font-bold transition-all duration-300 ${active
-                                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 shadow-lg shadow-amber-500/40"
-                                    : "text-white/60 hover:text-white hover:bg-white/10"
+                                ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 shadow-lg shadow-amber-500/40"
+                                : "text-white/60 hover:text-white hover:bg-white/10"
                                 }`}>
                             <Icon size={15} />
                             <span className="hidden sm:inline">{tab.label}</span>
@@ -425,7 +427,7 @@ function HeroSection() {
                     {STATS.map(({ value, label }) => (
                         <div key={label}
                             className="relative overflow-hidden bg-white/5 border border-white/10 rounded-2xl p-4 text-center backdrop-blur-sm hover:bg-white/10 hover:border-amber-400/20 transition-all duration-300 group">
-                            <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
                             <div className="text-2xl lg:text-3xl font-black text-amber-400 relative z-10">{value}</div>
                             <div className="text-white/50 text-xs mt-1 relative z-10">{label}</div>
                         </div>
@@ -551,8 +553,8 @@ function Gallery() {
                     {GALLERY_IMAGES.map((img, i) => (
                         <div key={i}
                             className={`absolute inset-0 transition-all duration-500 ${i === active
-                                    ? "opacity-100 scale-100"
-                                    : "opacity-0 scale-[1.02] pointer-events-none"
+                                ? "opacity-100 scale-100"
+                                : "opacity-0 scale-[1.02] pointer-events-none"
                                 } ${animating ? "opacity-0" : ""}`}>
                             <img src={img.src} alt={img.caption}
                                 className="w-full h-full object-cover" />
@@ -584,8 +586,8 @@ function Gallery() {
                     {GALLERY_IMAGES.map((img, i) => (
                         <button key={i} onClick={() => goTo(i)}
                             className={`relative rounded-xl overflow-hidden transition-all duration-200 ${i === active
-                                    ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-slate-950 opacity-100"
-                                    : "opacity-50 hover:opacity-80"
+                                ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-slate-950 opacity-100"
+                                : "opacity-50 hover:opacity-80"
                                 }`}
                             style={{ aspectRatio: "16/9" }}>
                             <img src={img.src} alt={`Thumbnail ${i + 1}`} className="w-full h-full object-cover" />
@@ -767,8 +769,8 @@ function AppDownloadBanner() {
                                 <div className="w-20 h-4 bg-slate-800 rounded-full" />
                             </div>
                             <div className="absolute inset-0 mt-7 bg-gradient-to-br from-slate-900 to-slate-950 flex flex-col items-center justify-start gap-3 p-4 pt-5">
-                                <div className="bg-white rounded-xl px-2 py-1.5 w-full flex justify-center">
-                                    <img src="/images/logo.jpg" alt="DNR Express" className="h-6 object-contain" />
+                                <div className="w-full flex justify-center py-1">
+                                    <img src="/images/logo.png" alt="DNR Express" className="h-6 object-contain" />
                                 </div>
                                 <div className="w-full space-y-2">
                                     {["Chandrapur → Pune", "Nagpur → Mumbai", "Aurangabad → Pune"].map(r => (
@@ -799,9 +801,11 @@ function Footer() {
 
                     {/* Brand */}
                     <div>
-                        <div className="bg-white rounded-xl px-4 py-2 inline-flex mb-5">
-                            <img src="/images/logo.jpg" alt="DNR Express" className="h-8 object-contain" />
-                        </div>
+                        <img
+                            src="/images/logo.png"
+                            alt="DNR Express"
+                            className="h-10 object-contain mb-5 brightness-0 invert opacity-80"
+                        />
                         <p className="text-xs leading-relaxed mb-5 text-slate-500">
                             Maharashtra's trusted bus service since 2008. Connecting Mumbai, Pune, Nagpur, Chandrapur, Aurangabad and beyond with comfort and reliability.
                         </p>
