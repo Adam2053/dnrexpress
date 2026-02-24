@@ -7,7 +7,7 @@ import {
     Zap, Shield, Star, ChevronRight, ChevronLeft, Menu, X,
     Truck, Navigation, Hash, Smartphone, Facebook, Instagram,
     Twitter, Youtube, Tv, Wind, Coffee, Lightbulb, AlertTriangle,
-    CreditCard, Headphones, CheckCircle, Images,
+    CreditCard, Headphones, CheckCircle, Images, Sun, Moon,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -67,10 +67,13 @@ const STATS = [
 ];
 
 const GALLERY_IMAGES = [
-    { src: "/images/gallery-1.jpg", caption: "Our fleet of DNR Express buses ready to roll" },
-    { src: "/images/gallery-2.jpg", caption: "DNR Express — side profile and front view" },
-    { src: "/images/gallery-3.jpg", caption: "DNR Express bus navigating city routes with ease" },
-    { src: "/images/gallery-1.jpg", caption: "Perfect alignment — DNR Express fleet on standby" },
+    { src: "/images/fleet-1.jpg", caption: "First-Class Comfort — Luxury Pushback Seats with DNR branding" },
+    { src: "/images/fleet-2.jpg", caption: "Personal Luggage Rack — Dedicated space for every passenger" },
+    { src: "/images/fleet-3.jpg", caption: "Fast Charging USB Ports & Ergonomic Mobile Holders" },
+    { src: "/images/fleet-4.jpg", caption: "Reading Lights & Sensor Air-Conditioning for every seat" },
+    { src: "/images/fleet-5.jpg", caption: "The DNR Express premium fleet — experience the joy of travel" },
+    { src: "/images/fleet-6.jpg", caption: "Luxury Sleeper Coach — USB & C-type fast charging ports" },
+    { src: "/images/fleet-7.jpg", caption: "Luxury Sleeper — Reading Lights & Sensor Air-Conditioning" },
 ];
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
@@ -102,7 +105,7 @@ function CitySelect({ value, onChange, placeholder, icon: Icon }: {
 }
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
-function Navbar() {
+function Navbar({ isDark, onToggle }: { isDark: boolean; onToggle: () => void }) {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -121,39 +124,51 @@ function Navbar() {
         { label: "Contact", href: "#contact" },
     ];
 
+    // When scrolled, follow theme. When on hero image, always transparent.
+    const navBg = scrolled
+        ? isDark
+            ? "bg-slate-950/95 backdrop-blur-xl shadow-2xl shadow-black/30"
+            : "bg-white/95 backdrop-blur-xl shadow-lg shadow-slate-200/60"
+        : "bg-transparent";
+
+    const linkClass = scrolled && !isDark
+        ? "text-slate-700 hover:text-amber-600"
+        : "text-white/80 hover:text-amber-400";
+
+    const loginClass = scrolled && !isDark
+        ? "text-slate-600 hover:text-slate-900"
+        : "text-white/60 hover:text-white";
+
     return (
-        <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${scrolled ? "bg-slate-950/95 backdrop-blur-xl shadow-2xl shadow-black/30" : "bg-transparent"
-            }`}>
+        <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${navBg}`}>
             {/* Top bar */}
-            <div className="hidden md:flex items-center justify-between px-6 py-1.5 bg-black/30 backdrop-blur-sm text-xs text-white/60 border-b border-white/5">
+            <div className={`hidden md:flex items-center justify-between px-6 py-1.5 text-xs border-b transition-colors ${scrolled && !isDark
+                ? "bg-slate-100 text-slate-600 border-slate-200"
+                : "bg-black/30 backdrop-blur-sm text-white/60 border-white/5"
+                }`}>
                 <div className="flex items-center gap-6">
-                    <a href="tel:8380000277" className="flex items-center gap-1.5 hover:text-amber-400 transition-colors">
+                    <a href="tel:8380000277" className="flex items-center gap-1.5 hover:text-amber-500 transition-colors">
                         <Phone size={11} /> 8380000277 / 8380000277
                     </a>
                     <span className="flex items-center gap-1.5"><Clock size={11} /> Mon–Sun: 9 AM – 11 PM</span>
                 </div>
                 <div className="flex items-center gap-5">
-                    <a href="/lrstatus" className="hover:text-amber-400 transition-colors flex items-center gap-1.5"><Truck size={11} />Track Shipment</a>
-                    <a href="#" className="hover:text-amber-400 transition-colors flex items-center gap-1.5"><Smartphone size={11} />Download App</a>
+                    <a href="/lrstatus" className="hover:text-amber-500 transition-colors flex items-center gap-1.5"><Truck size={11} />Track Shipment</a>
+                    <a href="#" className="hover:text-amber-500 transition-colors flex items-center gap-1.5"><Smartphone size={11} />Download App</a>
                 </div>
             </div>
 
             {/* Main bar */}
             <div className="flex items-center justify-between px-6 lg:px-10 py-3">
-                {/* Logo — transparent PNG */}
                 <a href="/" className="flex items-center group">
-                    <img
-                        src="/images/logo.png"
-                        alt="DNR Express"
-                        className="h-12 w-auto object-contain drop-shadow-lg group-hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.5)] transition-all duration-300"
-                    />
+                    <img src="/images/logo-hd-transparent.png" alt="DNR Express"
+                        className="h-8 w-auto object-contain drop-shadow-lg group-hover:drop-shadow-[0_0_12px_rgba(251,191,36,0.7)] group-hover:scale-105 transition-all duration-300" />
                 </a>
 
-                {/* Desktop links */}
                 <div className="hidden lg:flex items-center gap-7">
                     {links.map(l => (
                         <a key={l.label} href={l.href}
-                            className="text-white/80 hover:text-amber-400 text-sm font-medium transition-colors relative group">
+                            className={`${linkClass} text-sm font-medium transition-colors relative group`}>
                             {l.label}
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-400 group-hover:w-full transition-all duration-300 rounded-full" />
                         </a>
@@ -161,30 +176,50 @@ function Navbar() {
                 </div>
 
                 <div className="hidden lg:flex items-center gap-3">
-                    <a href="/login" className="text-sm text-white/60 hover:text-white transition-colors">Login</a>
+                    {/* Theme toggle */}
+                    <button onClick={onToggle} aria-label="Toggle theme"
+                        className={`p-2 rounded-xl border transition-all duration-300 ${isDark
+                            ? "border-slate-700 bg-slate-800/60 text-amber-400 hover:bg-slate-700"
+                            : "border-slate-200 bg-white text-slate-600 hover:bg-slate-100 shadow-sm"
+                            }`}>
+                        {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                    </button>
+                    <a href="/login" className={`text-sm transition-colors ${loginClass}`}>Login</a>
                     <a href="/signup" className="px-5 py-2 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 text-sm font-bold rounded-xl hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 transition-all duration-200">
                         Sign Up
                     </a>
                 </div>
 
-                <button onClick={() => setMobileOpen(!mobileOpen)}
-                    className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="Toggle menu">
-                    {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-                </button>
+                <div className="lg:hidden flex items-center gap-2">
+                    <button onClick={onToggle} aria-label="Toggle theme"
+                        className={`p-2 rounded-lg transition-colors ${isDark ? "text-amber-400 hover:bg-white/10" : "text-slate-600 hover:bg-slate-100"
+                            }`}>
+                        {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                    </button>
+                    <button onClick={() => setMobileOpen(!mobileOpen)}
+                        className={`p-2 rounded-lg transition-colors ${isDark ? "text-white hover:bg-white/10" : "text-slate-700 hover:bg-slate-100"
+                            }`} aria-label="Toggle menu">
+                        {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+                    </button>
+                </div>
             </div>
 
             {/* Mobile menu */}
             <div className={`lg:hidden overflow-hidden transition-all duration-300 ${mobileOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-                } bg-slate-950/98 backdrop-blur-md border-t border-white/10`}>
+                } ${isDark ? "bg-slate-950/98 border-white/10" : "bg-white/98 border-slate-200"} backdrop-blur-md border-t`}>
                 <div className="px-6 py-4 flex flex-col gap-1">
                     {links.map(l => (
                         <a key={l.label} href={l.href} onClick={() => setMobileOpen(false)}
-                            className="py-3 px-3 text-white/80 hover:text-amber-400 hover:bg-white/5 rounded-lg text-sm font-medium transition-all">
+                            className={`py-3 px-3 rounded-lg text-sm font-medium transition-all ${isDark
+                                ? "text-white/80 hover:text-amber-400 hover:bg-white/5"
+                                : "text-slate-700 hover:text-amber-600 hover:bg-slate-50"
+                                }`}>
                             {l.label}
                         </a>
                     ))}
                     <div className="mt-3 flex gap-3">
-                        <a href="/login" className="flex-1 py-2.5 text-center text-sm font-semibold text-white border border-white/20 rounded-xl hover:bg-white/10 transition-colors">Login</a>
+                        <a href="/login" className={`flex-1 py-2.5 text-center text-sm font-semibold rounded-xl transition-colors ${isDark ? "text-white border border-white/20 hover:bg-white/10" : "text-slate-700 border border-slate-200 hover:bg-slate-50"
+                            }`}>Login</a>
                         <a href="/signup" className="flex-1 py-2.5 text-center text-sm font-bold text-slate-900 bg-amber-400 rounded-xl hover:bg-amber-300 transition-colors">Sign Up</a>
                     </div>
                 </div>
@@ -366,16 +401,21 @@ function HeroSection() {
             {/* Real hero image with multi-layer overlay for premium look */}
             <div className="absolute inset-0">
                 <img
-                    src="/images/hero-bus.jpg"
-                    alt="DNR Express Bus"
-                    className="w-full h-full object-cover object-center scale-105"
-                    style={{ filter: "brightness(0.55) saturate(1.1)" }}
+                    src="/images/fleet-5.jpg"
+                    alt="DNR Express Fleet — premium buses at night"
+                    className="w-full h-full object-cover"
+                    style={{
+                        objectPosition: "center 35%",
+                        filter: "brightness(0.65) saturate(1.15) contrast(1.05)"
+                    }}
                 />
-                {/* Gradient overlays: left to right dark fade + bottom vignette */}
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-slate-950/30" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/30" />
-                {/* Warm bottom strip to blend into next section */}
-                <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-slate-950 to-transparent" />
+                {/* Left-heavy dark veil so hero text stays legible */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/25" />
+                {/* Top + bottom vignette */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+                {/* Warm amber tint strip at the very bottom to echo the bus headlights */}
+                <div className="absolute bottom-0 left-0 right-0 h-48"
+                    style={{ background: "linear-gradient(to top, var(--bg-page) 0%, transparent 100%)" }} />
             </div>
 
             {/* Animated noise texture overlay for premium feel */}
@@ -389,7 +429,7 @@ function HeroSection() {
                     <div className="space-y-5 max-w-xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-400/15 border border-amber-400/30 rounded-full text-amber-400 text-xs font-bold tracking-widest uppercase backdrop-blur-sm">
                             <span className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse" />
-                            Maharashtra's Premier Bus Network
+                            Maharashtra's Premier Bus Operator
                         </div>
 
                         <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black text-white leading-[1.08] tracking-tight">
@@ -441,17 +481,17 @@ function HeroSection() {
 // ─── Popular Routes ────────────────────────────────────────────────────────────
 function PopularRoutes() {
     return (
-        <section id="routes" className="py-20 bg-slate-950">
+        <section id="routes" className="py-20 t-page t-transition">
             <div className="max-w-7xl mx-auto px-6 lg:px-10">
                 <div className="text-center mb-12">
-                    <span className="inline-block px-3 py-1 bg-amber-400/10 border border-amber-400/20 text-amber-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3">
+                    <span className="inline-block px-3 py-1 bg-amber-50 border border-amber-200 text-amber-600 rounded-full text-xs font-bold uppercase tracking-widest mb-3">
                         Popular Routes
                     </span>
-                    <h2 className="text-3xl lg:text-4xl font-black text-white">
+                    <h2 className="text-3xl lg:text-4xl font-black t-text-p t-transition">
                         Maharashtra's Most Travelled{" "}
-                        <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">Bus Routes</span>
+                        <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Bus Routes</span>
                     </h2>
-                    <p className="text-slate-400 mt-3 max-w-xl mx-auto text-sm lg:text-base">
+                    <p className="t-text-m t-transition mt-3 max-w-xl mx-auto text-sm lg:text-base">
                         Daily departures, premium sleepers, and unbeatable fares on every major route.
                     </p>
                 </div>
@@ -459,8 +499,7 @@ function PopularRoutes() {
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {POPULAR_ROUTES.map((route, i) => (
                         <article key={i}
-                            className="group relative bg-slate-900 border border-slate-800 hover:border-amber-400/30 rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-amber-400/10 cursor-pointer overflow-hidden">
-                            {/* Glow on hover */}
+                            className="group relative t-section t-transition border t-border rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-100 cursor-pointer overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-br from-amber-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl" />
 
                             {route.badge && (
@@ -470,16 +509,16 @@ function PopularRoutes() {
                             )}
 
                             <div className="flex items-center gap-3 mb-4 relative z-10">
-                                <div className="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/20 transition-colors">
-                                    <Bus size={18} className="text-amber-400" />
+                                <div className="w-10 h-10 rounded-xl t-amber-bg border t-amber-border flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                                    <Bus size={18} className="t-amber t-transition" />
                                 </div>
                                 <div>
-                                    <div className="flex items-center gap-2 text-sm font-bold text-white">
+                                    <div className="flex items-center gap-2 text-sm font-bold t-text-p t-transition">
                                         {route.from}
-                                        <ArrowRight size={13} className="text-amber-400" />
+                                        <ArrowRight size={13} className="t-amber t-transition" />
                                         {route.to}
                                     </div>
-                                    <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
+                                    <div className="text-xs t-text-m t-transition mt-0.5 flex items-center gap-1">
                                         <Clock size={10} /> {route.duration}
                                     </div>
                                 </div>
@@ -487,10 +526,10 @@ function PopularRoutes() {
 
                             <div className="flex items-center justify-between relative z-10">
                                 <div>
-                                    <span className="text-xs text-slate-500">Starting from</span>
-                                    <p className="text-xl font-black text-amber-400">₹{route.price}</p>
+                                    <span className="text-xs t-text-m t-transition">Starting from</span>
+                                    <p className="text-xl font-black t-amber t-transition">₹{route.price}</p>
                                 </div>
-                                <button className="flex items-center gap-1.5 px-4 py-2 bg-slate-800 border border-slate-700 text-white text-xs font-bold rounded-xl group-hover:bg-amber-400 group-hover:border-amber-400 group-hover:text-slate-900 transition-all duration-200">
+                                <button className="flex items-center gap-1.5 px-4 py-2 bg-blue-700 border border-blue-700 text-white text-xs font-bold rounded-xl group-hover:bg-amber-400 group-hover:border-amber-400 group-hover:text-slate-900 transition-all duration-200">
                                     Book Now <ChevronRight size={13} />
                                 </button>
                             </div>
@@ -500,7 +539,7 @@ function PopularRoutes() {
 
                 <div className="text-center mt-10">
                     <a href="/routes"
-                        className="inline-flex items-center gap-2 px-6 py-3 border border-amber-400/40 text-amber-400 font-bold rounded-xl hover:bg-amber-400 hover:text-slate-900 transition-all duration-200 text-sm">
+                        className="inline-flex items-center gap-2 px-6 py-3 border border-amber-500/50 t-amber t-transition font-bold rounded-xl hover:bg-amber-500 hover:text-white transition-all duration-200 text-sm">
                         View All 50+ Routes <ArrowRight size={16} />
                     </a>
                 </div>
@@ -534,17 +573,17 @@ function Gallery() {
     }, [active, next]);
 
     return (
-        <section id="gallery" className="py-20 bg-gradient-to-b from-slate-950 to-slate-900">
+        <section id="gallery" className="py-20 t-alt t-transition">
             <div className="max-w-7xl mx-auto px-6 lg:px-10">
                 <div className="text-center mb-12">
-                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-amber-400/10 border border-amber-400/20 text-amber-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3">
+                    <span className="inline-flex items-center gap-2 px-3 py-1 t-amber-bg border t-amber-border t-amber t-transition rounded-full text-xs font-bold uppercase tracking-widest mb-3">
                         <Images size={12} /> Bus Gallery
                     </span>
-                    <h2 className="text-3xl lg:text-4xl font-black text-white">
+                    <h2 className="text-3xl lg:text-4xl font-black t-text-p t-transition">
                         Meet Our{" "}
-                        <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">Premium Fleet</span>
+                        <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Premium Fleet</span>
                     </h2>
-                    <p className="text-slate-400 mt-3 text-sm lg:text-base">Modern, well-maintained buses for the most comfortable rides across Maharashtra.</p>
+                    <p className="t-text-m t-transition mt-3 text-sm lg:text-base">Modern, well-maintained buses for the most comfortable rides across Maharashtra.</p>
                 </div>
 
                 {/* Main slider */}
@@ -586,7 +625,7 @@ function Gallery() {
                     {GALLERY_IMAGES.map((img, i) => (
                         <button key={i} onClick={() => goTo(i)}
                             className={`relative rounded-xl overflow-hidden transition-all duration-200 ${i === active
-                                ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-slate-950 opacity-100"
+                                ? "ring-2 ring-amber-400 ring-offset-2 ring-offset-transparent opacity-100"
                                 : "opacity-50 hover:opacity-80"
                                 }`}
                             style={{ aspectRatio: "16/9" }}>
@@ -599,7 +638,7 @@ function Gallery() {
                 <div className="flex justify-center gap-2 mt-5">
                     {GALLERY_IMAGES.map((_, i) => (
                         <button key={i} onClick={() => goTo(i)}
-                            className={`transition-all duration-300 rounded-full ${i === active ? "bg-amber-400 w-6 h-2" : "bg-slate-700 hover:bg-slate-500 w-2 h-2"
+                            className={`transition-all duration-300 rounded-full ${i === active ? "bg-amber-400 w-6 h-2" : "bg-[var(--border-strong)] hover:bg-[var(--amber)] w-2 h-2"
                                 }`} />
                     ))}
                 </div>
@@ -611,18 +650,18 @@ function Gallery() {
 // ─── Amenities ────────────────────────────────────────────────────────────────
 function Amenities() {
     return (
-        <section className="py-20 bg-slate-900">
+        <section className="py-20 t-section t-transition">
             <div className="max-w-7xl mx-auto px-6 lg:px-10">
                 <div className="grid lg:grid-cols-2 gap-16 items-center">
                     <div>
-                        <span className="inline-block px-3 py-1 bg-amber-400/10 border border-amber-400/20 text-amber-400 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+                        <span className="inline-block px-3 py-1 t-amber-bg border t-amber-border t-amber t-transition rounded-full text-xs font-bold uppercase tracking-widest mb-4">
                             On-Board Experience
                         </span>
-                        <h2 className="text-3xl lg:text-4xl font-black text-white mb-4">
+                        <h2 className="text-3xl lg:text-4xl font-black t-text-p t-transition mb-4">
                             Premium Amenities <br />
-                            <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">Every Journey</span>
+                            <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Every Journey</span>
                         </h2>
-                        <p className="text-slate-400 text-sm lg:text-base leading-relaxed mb-8">
+                        <p className="t-text-m t-transition text-sm lg:text-base leading-relaxed mb-8">
                             Every DNR Express bus is equipped with world-class amenities so you arrive refreshed, connected, and comfortable.
                         </p>
                         <div className="space-y-3">
@@ -632,8 +671,8 @@ function Amenities() {
                                 "SMS notifications for arrival/departure",
                                 "Dedicated customer support — 9 AM to 11 PM",
                             ].map(item => (
-                                <div key={item} className="flex items-start gap-3 text-sm text-slate-300">
-                                    <CheckCircle size={16} className="text-amber-400 mt-0.5 flex-shrink-0" /> {item}
+                                <div key={item} className="flex items-start gap-3 text-sm t-text-s">
+                                    <CheckCircle size={16} className="t-amber t-transition mt-0.5 flex-shrink-0" /> {item}
                                 </div>
                             ))}
                         </div>
@@ -642,11 +681,11 @@ function Amenities() {
                     <div className="grid grid-cols-4 gap-3">
                         {AMENITIES.map(({ icon: Icon, label }) => (
                             <div key={label}
-                                className="group flex flex-col items-center gap-2 p-4 bg-slate-800/60 border border-slate-700 rounded-2xl hover:bg-amber-400/10 hover:border-amber-400/30 transition-all duration-200 cursor-default">
-                                <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-700 group-hover:bg-amber-400/20 transition-colors">
-                                    <Icon size={20} className="text-slate-300 group-hover:text-amber-400 transition-colors" />
+                                className="group flex flex-col items-center gap-2 p-4 t-card-inner border border-slate-200 rounded-2xl hover:bg-amber-50 hover:border-amber-200 transition-all duration-200 cursor-default">
+                                <div className="w-10 h-10 flex items-center justify-center rounded-xl t-card-inner group-hover:bg-amber-100 transition-colors">
+                                    <Icon size={20} className="t-text-m group-hover:text-[var(--amber)] t-transition transition-colors" />
                                 </div>
-                                <span className="text-slate-400 group-hover:text-amber-300 text-[10px] text-center leading-tight transition-colors">
+                                <span className="t-text-m t-transition group-hover:text-amber-600 text-[10px] text-center leading-tight transition-colors">
                                     {label}
                                 </span>
                             </div>
@@ -661,32 +700,33 @@ function Amenities() {
 // ─── Testimonials ─────────────────────────────────────────────────────────────
 function Testimonials() {
     return (
-        <section className="py-20 bg-slate-950">
+        <section className="py-20 t-page t-transition">
             <div className="max-w-7xl mx-auto px-6 lg:px-10">
                 <div className="text-center mb-12">
-                    <span className="inline-block px-3 py-1 bg-amber-400/10 border border-amber-400/20 text-amber-400 rounded-full text-xs font-bold uppercase tracking-widest mb-3">
+                    <span className="inline-block px-3 py-1 t-amber-bg border t-amber-border t-amber t-transition rounded-full text-xs font-bold uppercase tracking-widest mb-3">
                         Passenger Reviews
                     </span>
-                    <h2 className="text-3xl lg:text-4xl font-black text-white">
+                    <h2 className="text-3xl lg:text-4xl font-black t-text-p t-transition">
                         What Our Passengers{" "}
-                        <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text text-transparent">Say About Us</span>
+                        <span className="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Say About Us</span>
                     </h2>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-5">
                     {TESTIMONIALS.map((t, i) => (
                         <div key={i}
-                            className="relative bg-slate-900 border border-slate-800 hover:border-amber-400/20 rounded-2xl p-6 hover:shadow-2xl hover:shadow-amber-400/5 transition-all duration-300 group">
-                            <div className="absolute top-5 right-6 text-6xl text-slate-800 font-serif leading-none select-none group-hover:text-slate-700 transition-colors">"</div>
+                            className="relative t-section t-transition border t-border rounded-2xl p-6 hover:shadow-xl hover:shadow-amber-50 transition-all duration-300 group">
+                            <div className="absolute top-5 right-6 text-6xl text-slate-200 font-serif leading-none select-none group-hover:text-slate-300 transition-colors">"
+                            </div>
                             <StarRating rating={t.rating} />
-                            <p className="mt-3 text-slate-400 text-sm leading-relaxed relative z-10">{t.text}</p>
-                            <div className="flex items-center gap-3 mt-5 pt-4 border-t border-slate-800">
+                            <p className="mt-3 t-text-s t-transition text-sm leading-relaxed relative z-10">{t.text}</p>
+                            <div className="flex items-center gap-3 mt-5 pt-4 border-t t-border">
                                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-900 text-xs font-black">
                                     {t.avatar}
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-white">{t.name}</p>
-                                    <p className="text-xs text-slate-500 flex items-center gap-1"><MapPin size={10} />{t.route}</p>
+                                    <p className="text-sm font-bold t-text-p t-transition">{t.name}</p>
+                                    <p className="text-xs t-text-m t-transition flex items-center gap-1"><MapPin size={10} />{t.route}</p>
                                 </div>
                             </div>
                         </div>
@@ -702,11 +742,11 @@ function Testimonials() {
                         { icon: Navigation, label: "Live Bus Tracking", sub: "Know where your bus is" },
                     ].map(({ icon: Icon, label, sub }) => (
                         <div key={label}
-                            className="flex flex-col items-center text-center gap-2 p-5 bg-slate-900 border border-slate-800 hover:border-amber-400/20 rounded-2xl transition-colors group">
-                            <div className="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center group-hover:bg-amber-400/20 transition-colors">
-                                <Icon size={18} className="text-amber-400" />
+                            className="flex flex-col items-center text-center gap-2 p-5 t-section t-transition border t-border rounded-2xl transition-colors group">
+                            <div className="w-10 h-10 rounded-xl t-amber-bg flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                                <Icon size={18} className="t-amber t-transition" />
                             </div>
-                            <p className="text-xs font-bold text-white">{label}</p>
+                            <p className="text-xs font-bold t-text-p t-transition">{label}</p>
                             <p className="text-[10px] text-slate-500">{sub}</p>
                         </div>
                     ))}
@@ -770,7 +810,7 @@ function AppDownloadBanner() {
                             </div>
                             <div className="absolute inset-0 mt-7 bg-gradient-to-br from-slate-900 to-slate-950 flex flex-col items-center justify-start gap-3 p-4 pt-5">
                                 <div className="w-full flex justify-center py-1">
-                                    <img src="/images/logo.png" alt="DNR Express" className="h-6 object-contain" />
+                                    <img src="/images/logo-hd.png" alt="DNR Express" className="h-8 w-auto object-contain" />
                                 </div>
                                 <div className="w-full space-y-2">
                                     {["Chandrapur → Pune", "Nagpur → Mumbai", "Aurangabad → Pune"].map(r => (
@@ -795,24 +835,24 @@ function AppDownloadBanner() {
 // ─── Footer ───────────────────────────────────────────────────────────────────
 function Footer() {
     return (
-        <footer id="contact" className="bg-[#050a14] text-slate-500">
+        <footer id="contact" className="bg-slate-100 #050a14] t-text-m t-transition">
             <div className="max-w-7xl mx-auto px-6 lg:px-10 py-14">
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
                     {/* Brand */}
                     <div>
                         <img
-                            src="/images/logo.png"
+                            src="/images/logo-hd-transparent.png"
                             alt="DNR Express"
-                            className="h-10 object-contain mb-5 brightness-0 invert opacity-80"
+                            className="h-16 w-auto object-contain mb-5"
                         />
-                        <p className="text-xs leading-relaxed mb-5 text-slate-500">
+                        <p className="text-xs leading-relaxed mb-5">
                             Maharashtra's trusted bus service since 2008. Connecting Mumbai, Pune, Nagpur, Chandrapur, Aurangabad and beyond with comfort and reliability.
                         </p>
                         <div className="flex gap-3">
                             {[Facebook, Instagram, Twitter, Youtube].map((Icon, i) => (
                                 <a key={i} href="#"
-                                    className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-slate-500 hover:bg-amber-400 hover:text-slate-900 transition-all">
+                                    className="w-8 h-8 rounded-lg t-card-inner flex items-center justify-center text-slate-500 hover:bg-amber-400 hover:text-slate-900 transition-all">
                                     <Icon size={15} />
                                 </a>
                             ))}
@@ -821,11 +861,11 @@ function Footer() {
 
                     {/* Quick Links */}
                     <div>
-                        <h3 className="text-white text-sm font-bold mb-4">Quick Links</h3>
+                        <h3 className="t-text-p t-transition text-sm font-bold mb-4">Quick Links</h3>
                         <ul className="space-y-2.5 text-xs">
                             {["Home", "About Us", "View Booking", "Cancellation", "Terms & Conditions", "Feedback", "Gallery", "Routes", "Privacy Policy"].map(l => (
                                 <li key={l}>
-                                    <a href="#" className="hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                                    <a href="#" className="hover:text-[var(--amber)] transition-colors flex items-center gap-1.5">
                                         <ChevronRight size={11} className="text-amber-400/40" /> {l}
                                     </a>
                                 </li>
@@ -835,11 +875,11 @@ function Footer() {
 
                     {/* Routes */}
                     <div>
-                        <h3 className="text-white text-sm font-bold mb-4">Popular Routes</h3>
+                        <h3 className="t-text-p t-transition text-sm font-bold mb-4">Popular Routes</h3>
                         <ul className="space-y-2.5 text-xs">
                             {["Chandrapur → Pune", "Chandrapur → Mumbai", "Chandrapur → Nagpur", "Nagpur → Jalna", "Nagpur → Aurangabad", "Pune → Mumbai", "Mumbai → Chandrapur"].map(r => (
                                 <li key={r}>
-                                    <a href="#" className="hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                                    <a href="#" className="hover:text-[var(--amber)] transition-colors flex items-center gap-1.5">
                                         <Bus size={10} className="text-amber-400/40 flex-shrink-0" /> {r}
                                     </a>
                                 </li>
@@ -849,28 +889,28 @@ function Footer() {
 
                     {/* Contact */}
                     <div>
-                        <h3 className="text-white text-sm font-bold mb-4">Contact Us</h3>
+                        <h3 className="t-text-p t-transition text-sm font-bold mb-4">Contact Us</h3>
                         <div className="space-y-3 text-xs">
                             <div className="flex gap-2.5">
-                                <MapPin size={13} className="text-amber-400 flex-shrink-0 mt-0.5" />
+                                <MapPin size={13} className="t-amber t-transition flex-shrink-0 mt-0.5" />
                                 <p>Opp. PWD Office, Sanjay Gandhi Market, Near Pani Ki Tanki, Nagpur Road, Chandrapur – 442401</p>
                             </div>
-                            <a href="tel:8380000277" className="flex items-center gap-2.5 hover:text-amber-400 transition-colors">
-                                <Phone size={13} className="text-amber-400" /> 8380000277 / 8380000277
+                            <a href="tel:8380000277" className="flex items-center gap-2.5 hover:text-[var(--amber)] transition-colors">
+                                <Phone size={13} className="t-amber t-transition" /> 8380000277 / 8380000277
                             </a>
-                            <a href="mailto:info@dnrexpress.in" className="flex items-center gap-2.5 hover:text-amber-400 transition-colors">
-                                <Mail size={13} className="text-amber-400" /> info@dnrexpress.in
+                            <a href="mailto:info@dnrexpress.in" className="flex items-center gap-2.5 hover:text-[var(--amber)] transition-colors">
+                                <Mail size={13} className="t-amber t-transition" /> info@dnrexpress.in
                             </a>
                             <div className="flex items-center gap-2.5">
-                                <Clock size={13} className="text-amber-400" /> Mon–Sun: 9:00 AM – 11:00 PM
+                                <Clock size={13} className="t-amber t-transition" /> Mon–Sun: 9:00 AM – 11:00 PM
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="border-t border-slate-900">
-                <div className="max-w-7xl mx-auto px-6 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-600">
+            <div className="border-t t-border">
+                <div className="max-w-7xl mx-auto px-6 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs t-text-m t-transition">
                     <p>© {new Date().getFullYear()} DNR Express. All rights reserved.</p>
                     <p>Made with ❤ for Maharashtra travelers</p>
                 </div>
@@ -881,9 +921,29 @@ function Footer() {
 
 // ─── Root ──────────────────────────────────────────────────────────────────────
 export default function LandingPage() {
+    const [isDark, setIsDark] = useState<boolean>(() => {
+        if (typeof window === "undefined") return true;
+        const stored = localStorage.getItem("dnr-theme");
+        if (stored) return stored === "dark";
+        return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    });
+
+    // Apply / remove the `dark` class on <html> and persist preference
+    useEffect(() => {
+        const root = document.documentElement;
+        if (isDark) {
+            root.classList.add("theme-dark");
+        } else {
+            root.classList.remove("theme-dark");
+        }
+        localStorage.setItem("dnr-theme", isDark ? "dark" : "light");
+    }, [isDark]);
+
+    const toggleTheme = () => setIsDark(d => !d);
+
     return (
-        <div className="font-sans antialiased bg-slate-950">
-            <Navbar />
+        <div className="font-sans antialiased t-page t-transition transition-colors duration-300">
+            <Navbar isDark={isDark} onToggle={toggleTheme} />
             <HeroSection />
             <PopularRoutes />
             <Gallery />

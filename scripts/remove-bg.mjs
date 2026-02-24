@@ -3,28 +3,38 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const input = path.join(__dirname, "../public/images/logo.jpg");
-const output = path.join(__dirname, "../public/images/logo.png");
 
-// Load image, get raw pixel data
-const img = sharp(input);
-const meta = await img.metadata();
-const { data, info } = await img.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+async function removeBg(inputPath, outputPath, threshold = 235) {
+    const img = sharp(inputPath);
+    const { data, info } = await img.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const { width, height, channels } = info;
+    const buf = Buffer.from(data);
 
-const { width, height, channels } = info;
-const buf = Buffer.from(data);
-
-// White-removal: for every pixel, if R,G,B are all >= 230, make it transparent
-for (let i = 0; i < width * height; i++) {
-    const idx = i * channels;
-    const r = buf[idx], g = buf[idx + 1], b = buf[idx + 2];
-    if (r >= 220 && g >= 220 && b >= 220) {
-        buf[idx + 3] = 0; // fully transparent
+    for (let i = 0; i < width * height; i++) {
+        const idx = i * channels;
+        const r = buf[idx], g = buf[idx + 1], b = buf[idx + 2];
+        // Remove near-white pixels
+        if (r >= threshold && g >= threshold && b >= threshold) {
+            buf[idx + 3] = 0; // fully transparent
+        }
     }
+
+    await sharp(buf, { raw: { width, height, channels } })
+        .png({ compressionLevel: 9 })
+        .toFile(outputPath);
+
+    console.log(`✅  Saved → ${outputPath}`);
 }
 
-await sharp(buf, { raw: { width, height, channels } })
-    .png()
-    .toFile(output);
+// Process both logos
+await removeBg(
+    path.join(__dirname, "../public/images/logo-hd.png"),
+    path.join(__dirname, "../public/images/logo-hd-transparent.png"),
+    230
+);
 
-console.log(`✅  Saved transparent logo → ${output}`);
+await removeBg(
+    path.join(__dirname, "../public/images/logo.jpg"),
+    path.join(__dirname, "../public/images/logo.png"),
+    220
+);

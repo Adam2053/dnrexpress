@@ -4,12 +4,72 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+/* ── CSS Custom Property Theme System ─────────────────────────────────
+   We use CSS variables for theming so the toggle works reliably
+   without depending on Tailwind's dark: class compilation.
+   The .theme-dark class is applied to <html> by our React toggle.
+──────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Light mode tokens */
+  --bg-page: #f8f5f0;
+  --bg-section: #ffffff;
+  --bg-alt: #f1ece4;
+  --bg-card: #ffffff;
+  --bg-card-inner: #f8f5f0;
+  --bg-nav: rgba(255, 255, 255, 0.96);
+  --bg-topbar: #f1ece4;
+  --text-primary: #1a0e00;
+  --text-secondary: #5a4030;
+  --text-muted: #9a7b5a;
+  --border: #e8ddd0;
+  --border-strong: #d4c4b0;
+  --amber: #c97c10;
+  --amber-bg: rgba(201, 124, 16, 0.08);
+  --amber-border: rgba(201, 124, 16, 0.25);
+  --nav-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  --hover-shadow: 0 8px 32px rgba(201, 124, 16, 0.12);
+  --scrollbar-bg: #e8ddd0;
+  --scrollbar-thumb: #c97c10;
+}
+
+html.theme-dark {
+  /* Dark mode — inspired by the premium DNR interiors: deep black + warm gold */
+  --bg-page: #0a0705;
+  --bg-section: #110d08;
+  --bg-alt: #0a0705;
+  --bg-card: #1a120a;
+  --bg-card-inner: #261a10;
+  --bg-nav: rgba(10, 7, 5, 0.97);
+  --bg-topbar: rgba(0, 0, 0, 0.50);
+  --text-primary: #fdf6ec;
+  --text-secondary: #c8a882;
+  --text-muted: #7a6248;
+  --border: #2e1f10;
+  --border-strong: #3d2914;
+  --amber: #f0a830;
+  --amber-bg: rgba(240, 168, 48, 0.10);
+  --amber-border: rgba(240, 168, 48, 0.25);
+  --nav-shadow: 0 4px 24px rgba(0, 0, 0, 0.60);
+  --card-shadow: 0 2px 20px rgba(0, 0, 0, 0.40);
+  --hover-shadow: 0 8px 40px rgba(240, 168, 48, 0.12);
+  --scrollbar-bg: #1a120a;
+  --scrollbar-thumb: #f0a830;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--bg-page);
+  transition: background-color 0.35s ease;
 }
 
 body {
@@ -18,34 +78,118 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-/* Custom scrollbar */
+/* ── Scrollbar ─────────────────────────────────────────────────────── */
+
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: var(--scrollbar-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e40af;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f59e0b;
+  background: var(--amber);
 }
 
-/* Date input placeholder color on dark backgrounds */
+/* ── Form elements ─────────────────────────────────────────────────── */
+
 input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: opacity(0.5);
+}
+
+html.theme-dark input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1) opacity(0.5);
 }
 
-/* Remove select arrow on Webkit */
-select {
+select,
+input {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+/* ── Theme-aware utility classes used by LandingPage ───────────────── */
+
+.t-page {
+  background-color: var(--bg-page);
+}
+
+.t-section {
+  background-color: var(--bg-section);
+}
+
+.t-alt {
+  background-color: var(--bg-alt);
+}
+
+.t-card {
+  background-color: var(--bg-card);
+  box-shadow: var(--card-shadow);
+}
+
+.t-card-inner {
+  background-color: var(--bg-card-inner);
+}
+
+.t-nav {
+  background-color: var(--bg-nav);
+  box-shadow: var(--nav-shadow);
+}
+
+.t-topbar {
+  background-color: var(--bg-topbar);
+}
+
+.t-text-p {
+  color: var(--text-primary);
+}
+
+.t-text-s {
+  color: var(--text-secondary);
+}
+
+.t-text-m {
+  color: var(--text-muted);
+}
+
+.t-border {
+  border-color: var(--border);
+}
+
+.t-border-s {
+  border-color: var(--border-strong);
+}
+
+.t-amber {
+  color: var(--amber);
+}
+
+.t-amber-bg {
+  background-color: var(--amber-bg);
+}
+
+.t-amber-border {
+  border-color: var(--amber-border);
+}
+
+.t-hover-card:hover {
+  box-shadow: var(--hover-shadow);
+  border-color: var(--amber-border) !important;
+  transform: translateY(-2px);
+}
+
+.t-transition {
+  transition: background-color 0.35s ease, color 0.35s ease,
+    border-color 0.35s ease, box-shadow 0.35s ease;
 }
